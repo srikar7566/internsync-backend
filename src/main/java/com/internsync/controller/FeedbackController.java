@@ -26,10 +26,14 @@ public class FeedbackController {
     @PostMapping
     public Feedback create(@RequestBody Map<String, Object> body) {
         Feedback fb = new Feedback();
+
+        // ✅ FIXED (camelCase)
         fb.setStudentId(Long.valueOf(body.get("studentId").toString()));
         fb.setInternshipId(Long.valueOf(body.get("internshipId").toString()));
+
         fb.setRating(Integer.parseInt(body.get("rating").toString()));
         fb.setRemarks(body.get("remarks").toString());
+
         return feedbackRepository.save(fb);
     }
 }
