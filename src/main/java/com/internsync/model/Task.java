@@ -16,14 +16,14 @@ public class Task {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(nullable = false)
+    @Column(name = "student_id", nullable = false)
     private Long studentId;
 
-    @Column(nullable = false)
+    @Column(name = "internship_id", nullable = false)
     private Long internshipId;
 
     @Column(nullable = false)
-    private String status = "todo"; // todo, in-progress, done
+    private String status = "todo";
 
     @Column(columnDefinition = "TEXT")
     private String report;

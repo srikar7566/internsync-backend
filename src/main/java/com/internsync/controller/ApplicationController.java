@@ -12,33 +12,35 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/applications")
+@CrossOrigin(origins = "*")
 public class ApplicationController {
 
     @Autowired
     private ApplicationRepository applicationRepository;
 
-    // ── GET /api/applications ───────────────────────────────
     @GetMapping
     public List<Application> getAll() {
         return applicationRepository.findAll();
     }
 
-    // ── POST /api/applications ──────────────────────────────
     @PostMapping
-    public Application apply(@RequestBody Map<String, Object> body) {
-        Application app = new Application();
-        app.setStudentId(Long.valueOf(body.get("studentId").toString()));
-        app.setInternshipId(Long.valueOf(body.get("internshipId").toString()));
-        app.setStatus("pending");
-        return applicationRepository.save(app);
+    public ResponseEntity<?> apply(@RequestBody Map<String, Object> body) {
+        try {
+            Application app = new Application();
+            app.setStudentId(Long.valueOf(body.get("studentId").toString()));
+            app.setInternshipId(Long.valueOf(body.get("internshipId").toString()));
+            app.setStatus("pending");
+            Application saved = applicationRepository.save(app);
+            return ResponseEntity.ok(saved);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error: " + e.getMessage());
+        }
     }
 
-    // ── PATCH /api/applications/{id}/status ─────────────────
     @PatchMapping("/{id}/status")
     public ResponseEntity<?> updateStatus(
             @PathVariable Long id,
             @RequestBody Map<String, String> body) {
-
         Optional<Application> optional = applicationRepository.findById(id);
         if (optional.isEmpty()) {
             return ResponseEntity.notFound().build();
